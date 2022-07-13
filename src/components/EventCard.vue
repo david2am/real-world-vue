@@ -4,7 +4,7 @@
     :to="{ name: 'event-show', params: { id: event.id } }"
   >
     <div class="event-card -shadow">
-      <span class="eyebrow">@{{ event.time }} on {{ event.date }}</span>
+      <span class="eyebrow">@{{ event.time }} on {{ date }}</span>
       <h4 class="title">{{ event.title }}</h4>
       <BaseIcon name="users"> {{ event.attendees.length }} attending</BaseIcon>
     </div>
@@ -14,21 +14,16 @@
 <script>
 import BaseIcon from './BaseIcon.vue'
 export default {
-  data() {
-    return {
-      event: {
-        id: '1',
-        title: 'Beach Cleanup',
-        date: 'Mon Jul 11, 2022',
-        time: '6:00',
-        attendees: [
-          { id: 'abc123', name: 'David' },
-          { id: 'edf456', name: 'Felipe' },
-        ],
-      },
-    }
+  props: {
+    event: Object,
   },
   components: { BaseIcon },
+  computed: {
+    date() {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' }
+      return new Date(this.event.date).toLocaleDateString('en', options)
+    },
+  },
 }
 </script>
 
