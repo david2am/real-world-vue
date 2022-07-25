@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: { id: 'abc123', name: 'David' },
+    event: {},
     events: [],
     eventsTotal: 0,
     categories: [
@@ -26,6 +27,9 @@ export default new Vuex.Store({
     ADD_EVENT(state, event) {
       state.events.push(event)
     },
+    SET_EVENT(state, event) {
+      state.event = event
+    },
     SET_EVENTS(state, events) {
       state.events = events
     },
@@ -36,6 +40,16 @@ export default new Vuex.Store({
   actions: {
     createEvent({ commit }, event) {
       return EventService.addEvent(event).then(() => commit('ADD_EVENT', event))
+    },
+    fetchEvent({ commit, getters }, id) {
+      const event = getters.getEventById(id)
+      if (event) {
+        commit('SET_EVENT', event)
+      } else {
+        EventService.getEvent(id)
+          .then((response) => commit('SET_EVENT', response.data))
+          .catch((error) => console.error(error.response))
+      }
     },
     fetchEvents({ commit }, { perPage, page }) {
       EventService.getEvents(perPage, page)
