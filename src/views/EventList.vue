@@ -8,6 +8,7 @@
         rel="prev"
       >
         Prev page
+        <template v-if="hasNextPage"> | </template>
       </router-link>
     </template>
 
@@ -30,13 +31,10 @@ export default {
   components: {
     EventCard,
   },
-  data() {
-    return {
-      perPage: 3,
-    }
-  },
   created() {
-    this.$store.event.dispatch('fetchEvents', {
+    this.perPage = 3
+
+    this.$store.dispatch('event/fetchEvents', {
       perPage: this.perPage,
       page: this.page,
     })

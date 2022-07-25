@@ -1,13 +1,11 @@
 import EventService from '@/services/EventService'
 
+export const namespaced = true
+
 export const state = {
   event: {},
   events: [],
   eventsTotal: 0,
-}
-
-export const getters = {
-  getEventById: (state) => (id) => state.events.filter((e) => (e.id = id))[0],
 }
 
 export const mutations = {
@@ -47,4 +45,9 @@ export const actions = {
       })
       .catch((error) => console.error(error.response))
   },
+}
+
+export const getters = {
+  getEventById: (state) => (id) =>
+    state.events.find((event) => event.id === id),
 }

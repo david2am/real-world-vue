@@ -90,7 +90,7 @@ export default {
     },
     createNewEvent() {
       this.$store
-        .dispatch('createEvent', this.event)
+        .dispatch('event/createEvent', this.event)
         .then((event) => {
           this.event = this.createFreshEvent()
           this.$router.push({
