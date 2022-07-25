@@ -7,12 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: { id: 'abc123', name: 'David' },
-    events: [
-      { id: 1, title: '...', organizer: '...' },
-      { id: 2, title: '...', organizer: '...' },
-      { id: 3, title: '...', organizer: '...' },
-      { id: 4, title: '...', organizer: '...' },
-    ],
+    events: [],
+    eventsTotal: 0,
     categories: [
       'sustainability',
       'nature',
@@ -30,10 +26,24 @@ export default new Vuex.Store({
     ADD_EVENT(state, event) {
       state.events.push(event)
     },
+    SET_EVENTS(state, events) {
+      state.events = events
+    },
+    SET_EVENTS_TOTAL(state, eventsTotal) {
+      state.eventsTotal = eventsTotal
+    },
   },
   actions: {
     createEvent({ commit }, event) {
       return EventService.addEvent(event).then(() => commit('ADD_EVENT', event))
+    },
+    fetchEvents({ commit }, { perPage, page }) {
+      EventService.getEvents(perPage, page)
+        .then((response) => {
+          commit('SET_EVENTS_TOTAL', response.headers['x-total-count'])
+          commit('SET_EVENTS', response.data)
+        })
+        .catch((error) => console.error(error.response))
     },
   },
   modules: {},
